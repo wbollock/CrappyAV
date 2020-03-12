@@ -29,16 +29,11 @@
 # how to get a goddamn test file
 
 # TODO: log file. maybe log filename, hash of file, if file found, hashes tested,etc maybe ask user if they want to log?
-# TODO: download ALL hash files. and combine them? no no, mapfile with multiple files
-# probably want to make a virus definitions folder
-# can iterate easily through the links. https://virusshare.com/hashes/VirusShare_00001.md5
-# https://virusshare.com/hashes/VirusShare_00002.md5, etc
-# ends at 374
+# this will be a status page on a webserver
 
 
 # CONFIG VALUES
-hashfile=md5_hash
-hashfileFixed=md5_hash_fixed
+
 hashDir=hashes
 
 # used for chaning text color
@@ -66,14 +61,41 @@ YELLOW='\033[0;33m'
 
 # 1. Download a metric shit ton of MD5 hashes
 # or, well, one
-# TODO: give user chance to download all of them if they want?
+
 
 
 downloadHashes(){
 
+    echo -e "${RED}Please note downloading all of these hashes requires 1.1GB of disk space and bandwith.${NC}"
+    echo "If you choose not to download all hashes, one 4.3MB file will be downloaded."
+    echo ""
+    sleep 1
+    echo "Do you want to download all hashes? [y/N]"
+    read -r hashChoice
+    case $hashChoice in
+    # N is bigger letter in prompt and therefore default, thats why "" is added to switch statement
+		y|Y) allHashes ;;
+		n|N|"") oneHash ;;
+		*) echo -e "${RED}Error...${NC}" && sleep .5
+	esac
+
+}
+
+allHashes(){
+    echo "allHashes placeholder"
+    # can iterate easily through the links. https://virusshare.com/hashes/VirusShare_00001.md5
+    # https://virusshare.com/hashes/VirusShare_00002.md5, etc
+    # ends at 374
+ 
+}
+
+
+oneHash(){
+    hashfile=md5_hash
+    hashfileFixed=md5_hash_fixed
     if [ ! -f "$hashDir"/"$hashfile" ]; then
     # hash file doesn't already exist, then download this
-        wget -O $hashDir/$hashfile https://virusshare.com/hashes/VirusShare_00000.md5
+        wget -O "$hashDir"/"$hashfile" https://virusshare.com/hashes/VirusShare_00000.md5
     fi
 
 
@@ -91,7 +113,7 @@ downloadHashes(){
 
 # 2. Put MD5 hashes into a usable form I can test files against
 
-mapfile -t hashArray < $hashfileFixed
+
 
 
 # DEBUG: remember to comment these out
@@ -108,7 +130,10 @@ mapfile -t hashArray < $hashfileFixed
 
 # 3. Take user input on what file they want to see if it's malicious
 hashCheck(){
-echo ""
+mapfile -t hashArray < "$hashDir"/"$hashfileFixed"
+# above only works for 
+
+
 echo -e "${BLUE}Hi user. Tell me what file you think is malware:${NC}"
 # example: /home/wbollock/class/CrappyAV/testvirus.txt
 read -r scaryVirus
