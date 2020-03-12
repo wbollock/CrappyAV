@@ -36,6 +36,10 @@
 
 hashDir=hashes
 
+# for single hash file
+hashfile=md5_hash
+hashfileFixed=md5_hash_fixed
+
 # used for chaning text color
 
 RED='\033[0;31m'
@@ -83,6 +87,7 @@ downloadHashes(){
 
 allHashes(){
     echo "allHashes placeholder"
+    sleep 1
     # can iterate easily through the links. https://virusshare.com/hashes/VirusShare_00001.md5
     # https://virusshare.com/hashes/VirusShare_00002.md5, etc
     # ends at 374
@@ -91,8 +96,10 @@ allHashes(){
 
 
 oneHash(){
-    hashfile=md5_hash
-    hashfileFixed=md5_hash_fixed
+    
+    echo "One hash file will be downloaded."
+    sleep 1
+
     if [ ! -f "$hashDir"/"$hashfile" ]; then
     # hash file doesn't already exist, then download this
         wget -O "$hashDir"/"$hashfile" https://virusshare.com/hashes/VirusShare_00000.md5
