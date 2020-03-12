@@ -21,7 +21,7 @@
 # for zsh: zmodload zsh/mapfile
 # for bash: mapfile should work in any version >4.0
 
-# for developer: https://aur.archlinux.org/packages/nodejs-terminalizer/ for pretty terminal screenshots
+# for developer: https://github.com/phw/peek
 
 # Potential Problems: 
 # array with 131072 values. Maybe kenny can help on that
@@ -35,9 +35,11 @@
 # https://virusshare.com/hashes/VirusShare_00002.md5, etc
 # ends at 374
 
+
 # CONFIG VALUES
 hashfile=md5_hash
 hashfileFixed=md5_hash_fixed
+hashDir=hashes
 
 # used for chaning text color
 
@@ -48,38 +50,44 @@ BLUE='\033[0;34m'
 BOLD="\033[1m"
 YELLOW='\033[0;33m'
 
-cat << "CrappyAV"
- _______  _______  _______  _______  _______           _______          
-(  ____ \(  ____ )(  ___  )(  ____ )(  ____ )|\     /|(  ___  )|\     /|
-| (    \/| (    )|| (   ) || (    )|| (    )|( \   / )| (   ) || )   ( |
-| |      | (____)|| (___) || (____)|| (____)| \ (_) / | (___) || |   | |
-| |      |     __)|  ___  ||  _____)|  _____)  \   /  |  ___  |( (   ) )
-| |      | (\ (   | (   ) || (      | (         ) (   | (   ) | \ \_/ / 
-| (____/\| ) \ \__| )   ( || )      | )         | |   | )   ( |  \   /  
-(_______/|/   \__/|/     \||/       |/          \_/   |/     \|   \_/   
-CrappyAV
+# cat << "CrappyAV"
+#  _______  _______  _______  _______  _______           _______          
+# (  ____ \(  ____ )(  ___  )(  ____ )(  ____ )|\     /|(  ___  )|\     /|
+# | (    \/| (    )|| (   ) || (    )|| (    )|( \   / )| (   ) || )   ( |
+# | |      | (____)|| (___) || (____)|| (____)| \ (_) / | (___) || |   | |
+# | |      |     __)|  ___  ||  _____)|  _____)  \   /  |  ___  |( (   ) )
+# | |      | (\ (   | (   ) || (      | (         ) (   | (   ) | \ \_/ / 
+# | (____/\| ) \ \__| )   ( || )      | )         | |   | )   ( |  \   /  
+# (_______/|/   \__/|/     \||/       |/          \_/   |/     \|   \_/   
+# CrappyAV
 
-echo ""
-echo -e "${RED}CrappyAV: A Will Bollock Producton${NC}"
+
 
 
 # 1. Download a metric shit ton of MD5 hashes
 # or, well, one
 # TODO: give user chance to download all of them if they want?
 
-if [ ! -f "$hashfile" ]; then
-# hash file doesn't already exist, then download this
-    wget -O $hashfile https://virusshare.com/hashes/VirusShare_00000.md5
-fi
+
+downloadHashes(){
+
+    if [ ! -f "$hashDir"/"$hashfile" ]; then
+    # hash file doesn't already exist, then download this
+        wget -O $hashDir/$hashfile https://virusshare.com/hashes/VirusShare_00000.md5
+    fi
 
 
-# Strip hashfile of the top header
-# thankfully all header lines started with #
+    # Strip hashfile of the top header
+    # thankfully all header lines started with #
 
-if [ ! -f $hashfileFixed ]; then
-# same deal, if hash file hasn't already been fixed don't do it again
-    sed '/^#/ d' < $hashfile > $hashfileFixed
-fi
+    if [ ! -f "$hashDir"/"$hashfileFixed" ]; then
+    # same deal, if hash file hasn't already been fixed don't do it again
+        sed '/^#/ d' < "$hashDir"/"$hashfile" > "$hashDir"/"$hashfileFixed"
+        rm -f "$hashDir"/"$hashfile"
+        # clear up old hash file to save space
+    fi
+
+}
 
 # 2. Put MD5 hashes into a usable form I can test files against
 
@@ -99,7 +107,7 @@ mapfile -t hashArray < $hashfileFixed
 
 
 # 3. Take user input on what file they want to see if it's malicious
-
+hashCheck(){
 echo ""
 echo -e "${BLUE}Hi user. Tell me what file you think is malware:${NC}"
 # example: /home/wbollock/class/CrappyAV/testvirus.txt
@@ -138,9 +146,9 @@ done
 
 echo -e "${RED}Our advanced blockchain neural-network AI didn't find anything wrong with the file. Proceed as normal!${NC}"
 
+}
 
-
-
+updateStatusPage(){
 # 6. Optional: create a web status page of crappyav
 # Include:
 # Last time run
@@ -148,3 +156,48 @@ echo -e "${RED}Our advanced blockchain neural-network AI didn't find anything wr
 # Amount of hashes downloaded
 # Hash of last file checked
 # Number of exploits found all time
+echo "updateStatusPage Placeholder"
+sleep 2
+}
+
+# -----------------------------------
+# Main logic - infinite loop
+# ------------------------------------
+
+
+# Menu Function
+# Display list of options, start at top of decision tree
+# Inspiration from https://bash.cyberciti.biz/guide/Menu_driven_scripts
+
+show_menus() {
+	clear
+	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"	
+	echo -e "${RED}CrappyAV${NC}"
+	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    echo "Please select an option below:"
+    echo ""
+	echo "1) Download virus definitions"
+	echo "2) Run hash list on a specific file"
+	echo "3) Update the CrappyAV web status page"
+    echo "4) Exit"
+}
+# Read options. Call another function from 1 or 2.
+read_options(){
+	local choice
+    echo ""
+	read -p "Please select a CrappyAV option: " choice
+	case $choice in
+		1) downloadHashes ;;
+		2) hashCheck ;;
+        3) updateStatusPage ;;
+		4) clear
+           exit 0 ;;
+		*) echo -e "${RED}Error...${NC}" && sleep .5
+	esac
+}
+
+while true
+do
+	show_menus
+	read_options
+done
