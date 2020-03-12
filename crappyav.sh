@@ -21,6 +21,13 @@
 # for zsh: zmodload zsh/mapfile
 # for bash: mapfile should work in any version >4.0
 
+# Potential Problems: 
+# array with 131072 values. Maybe kenny can help on that
+# how to handle downloading all the files?
+# how to get a goddamn test file
+
+# TODO: log file. maybe log filename, hash of file, if file found, hashes tested,etc maybe ask user if they want to log?
+
 # CONFIG VALUES
 hashfile=md5_hash
 hashfileFixed=md5_hash_fixed
@@ -45,10 +52,13 @@ cat << "CrappyAV"
 (_______/|/   \__/|/     \||/       |/          \_/   |/     \|   \_/   
 CrappyAV
 
-
+echo ""
 echo -e "${RED}CrappyAV: A Will Bollock Producton${NC}"
+
+
 # 1. Download a metric shit ton of MD5 hashes
 # or, well, one
+# TODO: give user chance to download all of them if they want?
 
 if [ ! -f "$hashfile" ]; then
 # hash file doesn't already exist, then download this
@@ -83,14 +93,24 @@ mapfile -t hashArray < $hashfileFixed
 
 # 3. Take user input on what file they want to see if it's malicious
 
+echo ""
+echo -e "${BLUE}Hi user. Tell me what file you think is malware:${NC}"
+# example: /home/wbollock/class/CrappyAV/testvirus.txt
+read -r scaryVirus
 
 
+# 4. Calculate MD5 hash of user file (hash should match downloaded ones)
+# md5sum program used for this. should be installed on most *nix
+# md5sum output: ed0335c6becd00a2276481bb7561b743  testvirus.txt
+# I wish it would only print the hash.. man page wasn't helpful
+# https://unix.stackexchange.com/questions/65932/how-to-get-the-first-word-of-a-string
+fileHash=$(md5sum "$scaryVirus"  | head -n1 | awk '{print $1;}')
 
+echo "Thanks for that. Doing some really smart algorithm..."
+sleep 1
 
-
-
-# 4. Calculate hash of user file (hash should match downloaded ones)
-
+echo "File hash is: $fileHash"
+# damn this works too. on a roll. hash is 32 characters
 
 
 
@@ -99,6 +119,17 @@ mapfile -t hashArray < $hashfileFixed
 
 # 5. Compare hash of user file to my big list of hashes
 
+for hash in "${hashArray[@]}"
+do
+ # compare fileHash to my big ass list
+ if [ "$hash" == "$fileHash" ]; then
+    echo -e "${RED}Match found! This wasn't supposed to happen. Wipe your drive."
+ fi
+ echo "$hash"
+ # TODO: It'd be cool if this made a rainbow
+done
+
+echo -e "${RED}Our advanced blockchain neural-network AI didn't find anything wrong with the file. Proceed as normal!${NC}"
 
 
 
