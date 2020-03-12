@@ -210,7 +210,8 @@ deleteHashes(){
 
     echo -e "${RED}Alright, we will clear your hashes.${NC}"
     echo ""
-    echo  -e "The hash directory has a size of ${BLUE}$(du -h $hashDir | head -n1 | awk '{print $1;}')${NC} and ${BLUE}$(ls -1 $hashDir | wc -l)${NC} file(s)."
+    # don't be a dummy and parse ls. echo works too
+    echo  -e "The hash directory has a size of ${BLUE}$(du -h $hashDir | head -n1 | awk '{print $1;}')${NC} and ${BLUE}$(echo $hashDir | wc -l)${NC} file(s)."
     echo ""
     sleep 1
     echo -e "${RED}Really delete?${NC} [Y/n]"
@@ -242,7 +243,7 @@ show_menus() {
 	echo "1) Download virus definitions"
 	echo "2) Run hash list on a specific file"
 	echo "3) Update the CrappyAV web status page"
-    echo "4) Delete all hashe files from system"
+    echo "4) Delete all hash files from system"
     echo "5) Exit"
 }
 # Read options. Call another function from 1 or 2.
