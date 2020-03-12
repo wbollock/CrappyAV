@@ -21,12 +21,19 @@
 # for zsh: zmodload zsh/mapfile
 # for bash: mapfile should work in any version >4.0
 
+# for developer: https://aur.archlinux.org/packages/nodejs-terminalizer/ for pretty terminal screenshots
+
 # Potential Problems: 
 # array with 131072 values. Maybe kenny can help on that
 # how to handle downloading all the files?
 # how to get a goddamn test file
 
 # TODO: log file. maybe log filename, hash of file, if file found, hashes tested,etc maybe ask user if they want to log?
+# TODO: download ALL hash files. and combine them? no no, mapfile with multiple files
+# probably want to make a virus definitions folder
+# can iterate easily through the links. https://virusshare.com/hashes/VirusShare_00001.md5
+# https://virusshare.com/hashes/VirusShare_00002.md5, etc
+# ends at 374
 
 # CONFIG VALUES
 hashfile=md5_hash
@@ -134,18 +141,7 @@ echo -e "${RED}Our advanced blockchain neural-network AI didn't find anything wr
 
 
 
-
-
-# 6. Tell user if their file is a virus or not!
-
-
-
-
-
-
-
-
-# 7. Optional: create a web status page of crappyav
+# 6. Optional: create a web status page of crappyav
 # Include:
 # Last time run
 # Last file checked
