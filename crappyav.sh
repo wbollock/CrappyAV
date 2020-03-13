@@ -86,15 +86,27 @@ downloadHashes(){
 }
 
 allHashes(){
-    echo "allHashes placeholder"
+    echo "Downloading 374 hash files"
     sleep 1
     # can iterate easily through the links. https://virusshare.com/hashes/VirusShare_00001.md5
     # https://virusshare.com/hashes/VirusShare_00002.md5, etc
     # ends at 374
 
+    # download all 374 hash files
     for i in {1..374}
     do
-        wget -O "$hashDir"/"$hashfile$i" https://virusshare.com/hashes/VirusShare_0000$i.md5
+    # have to adjust url based on file number
+        if ((i < 10 ))
+        then
+            wget -O $hashDir/"$hashfile"_$i https://virusshare.com/hashes/VirusShare_0000$i.md5
+        elif ((i >= 10 && i < 100 ))
+        then
+            wget -O $hashDir/"$hashfile"_$i https://virusshare.com/hashes/VirusShare_000$i.md5
+        elif ((i >= 100 ))
+        then
+            wget -O $hashDir/"$hashfile"_$i https://virusshare.com/hashes/VirusShare_00$i.md5
+        fi
+
     done
  
 }
@@ -144,6 +156,7 @@ oneHash(){
 
 # 3. Take user input on what file they want to see if it's malicious
 hashCheck(){
+    # this needs to work for one hash file as well as 376
 
 # TODO:will need to check on amount on hash files downloaded...
 # that will help know what file/files to compare against. maybe check to see amount of file in hashDir?
@@ -211,7 +224,7 @@ deleteHashes(){
     echo -e "${RED}Alright, we will clear your hashes.${NC}"
     echo ""
     # don't be a dummy and parse ls. echo works too
-    echo  -e "The hash directory has a size of ${BLUE}$(du -h $hashDir | head -n1 | awk '{print $1;}')${NC} and ${BLUE}$(echo $hashDir | wc -l)${NC} file(s)."
+    echo  -e "The hash directory has a size of ${BLUE}$(du -h $hashDir | head -n1 | awk '{print $1;}')${NC} and ${BLUE}$(find $hashDir -type f | wc -l)${NC} file(s)."
     echo ""
     sleep 1
     echo -e "${RED}Really delete?${NC} [Y/n]"
