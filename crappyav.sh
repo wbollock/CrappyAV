@@ -13,14 +13,6 @@
 #%    ${SCRIPT_NAME} -o DEFAULT arg1 arg2
 #%
 #================================================================
-# Links:
-# https://virusshare.com/hashes.4n6
-# Okay, each link has 131,072 hashes. Each hash is it's own line
-
-# Prerequisites:
-# for zsh: zmodload zsh/mapfile
-# for bash: mapfile should work in any version >4.0
-# for cool gifs: https://github.com/phw/peek
 
 # Potential Problems: 
 # array with 131072 values. Maybe kenny can help on that
@@ -29,6 +21,7 @@
 # TODO CHECKLIST:
 # Hash function checking needs a lot of work
 # status page shit
+# quaratine
 
 
 # CONFIG VALUES
@@ -38,6 +31,9 @@ hashDir=hashes
 # for single hash file
 hashfile=md5_hash
 hashfileFixed=md5_hash_fixed
+fullHashFile=hashlist.txt
+fileJail=jail
+# note that both files will really look like md5_hash_204_fixed after dl
 
 # used for chaning text color
 
@@ -74,7 +70,7 @@ downloadHashes(){
     case $hashChoice in
     # N is bigger letter in prompt and therefore default, thats why "" is added to switch statement
 		y|Y) allHashes ;;
-		n|N|"") oneHashDL ;;
+		n|N|"")  ;;
 		*) echo -e "${RED}Error...${NC}" && sleep .5
 	esac
 
@@ -87,7 +83,7 @@ allHashes(){
     # https://virusshare.com/hashes/VirusShare_00002.md5, etc
     # ends at 374
 
-    # download all 374 hash files
+    #download all 374 hash files
     for i in {1..374}
     do
     # have to adjust url based on file number
@@ -104,31 +100,43 @@ allHashes(){
 
     done
  
+    # need to remove headers now
+    for file in "${hashDir:?}/"*
+    do
+        sed '/^#/ d' < "$file" > "$file"_fixed
+        rm "$file"
+        cat "$file"_fixed >> $hashDir/$fullHashFile
+        rm "$file"_fixed
+    # all files will have _fixed suffix
+    # md5_hash_204_fixed
+    done
+
+
 }
 
-
-oneHashDL(){
+# would be more work than it's worth allowing one file
+# oneHashDL(){
     
-    echo "One hash file will be downloaded."
-    sleep 1
+#     echo "One hash file will be downloaded."
+#     sleep 1
 
-    if [ ! -f "$hashDir"/"$hashfile" ]; then
-    # hash file doesn't already exist, then download this
-        wget -O "$hashDir"/"$hashfile" https://virusshare.com/hashes/VirusShare_00000.md5
-    fi
+#     if [ ! -f "$hashDir"/"$hashfile" ]; then
+#     # hash file doesn't already exist, then download this
+#         wget -O "$hashDir"/"$hashfile" https://virusshare.com/hashes/VirusShare_00000.md5
+#     fi
 
-    # Strip hashfile of the top header
-    # thankfully all header lines started with #
-    if [ ! -f "$hashDir"/"$hashfileFixed" ]; then
+#     # Strip hashfile of the top header
+#     # thankfully all header lines started with #
+#     if [ ! -f "$hashDir"/"$hashfileFixed" ]; then
     
-        sed '/^#/ d' < "$hashDir"/"$hashfile" > "$hashDir"/"$hashfileFixed"
-        rm -f "$hashDir"/"$hashfile"
-        # clear up old hash file to save space
-    fi
+#         sed '/^#/ d' < "$hashDir"/"$hashfile" > "$hashDir"/"$hashfileFixed"
+#         rm -f "$hashDir"/"$hashfile"
+#         # clear up old hash file to save space
+#     fi
     
-    rm -f "$hashDir"/"$hashfile"
+#     rm -f "$hashDir"/"$hashfile"
 
-}
+# }
 
 #Take user input on what file they want to see if it's malicious
 hashCheck(){
@@ -137,8 +145,9 @@ hashCheck(){
     # TODO:will need to check on amount on hash files downloaded...
     # that will help know what file/files to compare against. maybe check to see amount of file in hashDir?
 
-    mapfile -t hashArray < "$hashDir"/"$hashfileFixed"
-    # above only works for 
+    #mapfile -t hashArray < "$hashDir"/"$hashfileFixed"
+
+   
 
 
     echo -e "${BLUE}Hi user. Tell me what file you think is malware:${NC}"
@@ -157,20 +166,34 @@ hashCheck(){
     sleep 1
 
     echo "File hash is: $fileHash"
+    sleep 1
     # damn this works too. on a roll. hash is 32 characters
     # 5. Compare hash of user file to my big list of hashes
 
-    for hash in "${hashArray[@]}"
-    do
-    # compare fileHash to my big ass list
-    if [ "$hash" == "$fileHash" ]; then
-        echo -e "${RED}Match found! This wasn't supposed to happen. Wipe your drive."
-    fi
-    echo "$hash"
-    # TODO: It'd be cool if this made a rainbow
-    done
 
-    echo -e "${RED}Our advanced blockchain neural-network AI didn't find anything wrong with the file. Proceed as normal!${NC}"
+    for file in "${hashDir:?}/"*
+    do
+        i=1
+        mapfile -t hashArray < $hashDir/"$hashfile"_"$i"_fixed
+        
+    done
+        
+        echo "Number of elements in array..."
+        echo "${#hashArray[*]}"
+
+        sleep 10
+        
+    # for hash in "${hashArray[@]}"
+    # do
+    # # compare fileHash to my big ass list
+    # if [ "$hash" == "$fileHash" ]; then
+    #     echo -e "${RED}Match found! This wasn't supposed to happen. Wipe your drive."
+    # fi
+    # echo "$hash"
+    # # TODO: It'd be cool if this made a rainbow
+    # done
+
+    # echo -e "${RED}Our advanced blockchain neural-network AI didn't find anything wrong with the file. Proceed as normal!${NC}"
 
 }
 
