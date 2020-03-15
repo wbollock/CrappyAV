@@ -100,6 +100,9 @@ allHashes(){
 
     done
  
+    sleep 2
+    echo -e "${RED}Trimming and combining files...${NC}"
+    sleep 2
     # need to remove headers now
     for file in "${hashDir:?}/"*
     do
@@ -107,8 +110,7 @@ allHashes(){
         rm "$file"
         cat "$file"_fixed >> $hashDir/$fullHashFile
         rm "$file"_fixed
-    # all files will have _fixed suffix
-    # md5_hash_204_fixed
+    # hashlist.txt should be 1.1G
     done
 
 
@@ -171,18 +173,26 @@ hashCheck(){
     # 5. Compare hash of user file to my big list of hashes
 
 
-    for file in "${hashDir:?}/"*
-    do
-        i=1
-        mapfile -t hashArray < $hashDir/"$hashfile"_"$i"_fixed
+    # if [ -f "$hashDir"/"$fullHashFile" ]; then
+    #     mapfile -t hashArray < "$hashDir"/"$fullHashFile"
+    # else
+    #     echo -e "${YELLOW} Oh no. Couldn't find any hashes. Did you download virus definitions?${NC}"
+    # fi
         
-    done
-        
-        echo "Number of elements in array..."
-        echo "${#hashArray[*]}"
+    if [ -f "$hashDir"/"$fullHashFile" ]; then
+        if grep -q "$fileHash" "$hashDir"/"$fullHashFile"; then
+            echo -e "${RED}Match found! This wasn't supposed to happen. Wipe your drive.${NC}"
+            # TODO: replace w/ quaratine
+        else
+            echo -e "${BLUE}Yay! Your file is safe. Chmod 777 whatever you want.${NC}"
+        fi
+    else
+        echo -e "${YELLOW} Oh no. Couldn't find any hashes. Did you download virus definitions?${NC}"
+    fi
 
-        sleep 10
-        
+    sleep 3    
+    
+        # this ate up all my ram
     # for hash in "${hashArray[@]}"
     # do
     # # compare fileHash to my big ass list
