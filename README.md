@@ -2,7 +2,13 @@
 
 A terrible CLI AV. Grabs MD5 hashes of virus files and lets the user scan individual files to see if they match against known virus hashes.
 
-![](img/crappyav1.gif)
+![](img/crappyavheader.gif)
+
+## Quarantine Malware
+
+Take your suspected malware and shove it in a place where the son doesn't shine. CrappyAV will strip all permissions and put the file in virtual timeout.
+
+![](img/hashcheck.gif)
 
 ## Usage
 

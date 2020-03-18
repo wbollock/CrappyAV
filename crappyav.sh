@@ -167,8 +167,22 @@ hashCheck(){
     # ed0335c6becd00a2276481bb7561b743  testvirus.txt
     if [ -f "$hashDir"/"$fullHashFile" ]; then
         if grep -q "$fileHash" "$hashDir"/"$fullHashFile"; then
-            echo -e "${RED}Match found! This wasn't supposed to happen. Wipe your drive.${NC}"
-            # TODO: replace w/ quaratine
+            echo -e "${RED}Match found! This wasn't supposed to happen.${NC}"
+            echo ""
+            echo -e "Would you link to quarantine ${RED}$scaryVirus${NC}?"
+            echo -e "It will be moved to the folder ${BLUE}jail${NC} and stripped of all permissions. [y/N]"
+            read -r quarChoice
+            case $quarChoice in
+                y|Y) sudo chmod 000 $scaryVirus
+                     sudo mv "$scaryVirus" jail/
+                     echo ""
+                     echo -e "$scaryVirus has been moved to ${BLUE}jail${NC}."
+                     sudo ls -l jail;;
+                n|N|"") echo "$scaryVirus will not be quarantined."
+                sleep 1 ;;
+                *) echo -e "${RED}Error...${NC}" && sleep .5
+            esac
+
         else
             echo -e "${BLUE}Yay! Your file is safe. Chmod 777 whatever you want.${NC}"
         fi
@@ -176,7 +190,7 @@ hashCheck(){
         echo -e "${YELLOW} Oh no. Couldn't find any hashes. Did you download virus definitions?${NC}"
     fi
 
-    sleep 3    
+    sleep 3
     
         # this ate up all my ram
     # for hash in "${hashArray[@]}"
@@ -201,6 +215,9 @@ updateStatusPage(){
     # Amount of hashes downloaded
     # Hash of last file checked
     # Number of exploits found all time
+
+    # leave user choice to disable or enable server status page
+    # probably with a flag file?
 
     # probably best to call a second script with parameters
     echo "updateStatusPage Placeholder"
@@ -238,8 +255,8 @@ show_menus() {
 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     echo "Please select an option below:"
     echo ""
-	echo "1) Download virus definitions"
-	echo "2) Run hash list on a specific file"
+	echo "1) Download virus definitions (Recommended)"
+	echo -e "2) Run hash list on a suspected ${RED}malware${NC}"
 	echo "3) Update the CrappyAV web status page"
     echo "4) Delete all hash files from system"
     echo "5) Exit"
