@@ -2,7 +2,11 @@
 
 A terrible CLI AV. Grabs MD5 hashes of virus files and lets the user scan individual files to see if they match against known virus hashes.
 
-![](img/crappyavheader.gif)
+
+## Option Menu
+![](img/crappyavheader.png)
+
+
 
 ## Quarantine Malware
 
@@ -17,6 +21,10 @@ Run the script with:
 ```
 ./crappyav.sh
 ```
+
+Please select "1" before trying to check if a file is malicious. You need to download 1.1GB of virus definitions first.
+
+
 
 If you're using ZSH, you'll need to mapfile module.
 
