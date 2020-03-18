@@ -33,6 +33,10 @@ hashfile=md5_hash
 hashfileFixed=md5_hash_fixed
 fullHashFile=hashlist.txt
 fileJail=jail
+
+# to have a file we can verify the checking mechanism against
+virusTest=testvirus.txt
+cleanTest=testclean.txt
 # note that both files will really look like md5_hash_204_fixed after dl
 
 # used for chaning text color
@@ -110,6 +114,7 @@ allHashes(){
         rm "$file"
         cat "$file"_fixed >> $hashDir/$fullHashFile
         rm "$file"_fixed
+        md5sum "$virusTest"  | head -n1 | awk '{print $1;}' >> $hashDir/$fullHashFile
     # hashlist.txt should be 1.1G
     done
 
@@ -140,28 +145,15 @@ allHashes(){
 
 # }
 
-#Take user input on what file they want to see if it's malicious
 hashCheck(){
-    # this needs to work for one hash file as well as 376
-
-    # TODO:will need to check on amount on hash files downloaded...
-    # that will help know what file/files to compare against. maybe check to see amount of file in hashDir?
-
-    #mapfile -t hashArray < "$hashDir"/"$hashfileFixed"
-
-   
-
-
     echo -e "${BLUE}Hi user. Tell me what file you think is malware:${NC}"
     # example: /home/wbollock/class/CrappyAV/testvirus.txt
     read -r scaryVirus
 
-
     # 4. Calculate MD5 hash of user file (hash should match downloaded ones)
     # md5sum program used for this. should be installed on most *nix
     # md5sum output: ed0335c6becd00a2276481bb7561b743  testvirus.txt
-    # I wish it would only print the hash.. man page wasn't helpful
-    # https://unix.stackexchange.com/questions/65932/how-to-get-the-first-word-of-a-string
+
     fileHash=$(md5sum "$scaryVirus"  | head -n1 | awk '{print $1;}')
 
     echo "Thanks for that. Doing some really smart algorithm..."
@@ -169,16 +161,10 @@ hashCheck(){
 
     echo "File hash is: $fileHash"
     sleep 1
-    # damn this works too. on a roll. hash is 32 characters
-    # 5. Compare hash of user file to my big list of hashes
 
-
-    # if [ -f "$hashDir"/"$fullHashFile" ]; then
-    #     mapfile -t hashArray < "$hashDir"/"$fullHashFile"
-    # else
-    #     echo -e "${YELLOW} Oh no. Couldn't find any hashes. Did you download virus definitions?${NC}"
-    # fi
-        
+    # Compare hash of user file to my big list of hashes
+    # 48fe63b00f90279979cc4ea85446351f  testclean.txt
+    # ed0335c6becd00a2276481bb7561b743  testvirus.txt
     if [ -f "$hashDir"/"$fullHashFile" ]; then
         if grep -q "$fileHash" "$hashDir"/"$fullHashFile"; then
             echo -e "${RED}Match found! This wasn't supposed to happen. Wipe your drive.${NC}"
@@ -208,17 +194,17 @@ hashCheck(){
 }
 
 updateStatusPage(){
-# 6. Optional: create a web status page of crappyav
-# Include:
-# Last time run
-# Last file checked
-# Amount of hashes downloaded
-# Hash of last file checked
-# Number of exploits found all time
+    # 6. Optional: create a web status page of crappyav
+    # Include:
+    # Last time run
+    # Last file checked
+    # Amount of hashes downloaded
+    # Hash of last file checked
+    # Number of exploits found all time
 
-# probably best to call a second script with parameters
-echo "updateStatusPage Placeholder"
-sleep 2
+    # probably best to call a second script with parameters
+    echo "updateStatusPage Placeholder"
+    sleep 2
 }
 
 
@@ -274,7 +260,6 @@ read_options(){
 		*) echo -e "${RED}Error...${NC}" && sleep .5
 	esac
 }
-
 
 # -----------------------------------
 # Main logic - infinite loop

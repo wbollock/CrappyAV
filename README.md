@@ -17,3 +17,11 @@ If you're using ZSH, you'll need to mapfile module.
 ```
 zmodload zsh/mapfile
 ```
+
+## Credits
+
+Gifs made with [peek](https://github.com/phw/peek)
+
+MD5 Hashes from [VirusShare](https://virusshare.com/hashes.4n6)
+
+John Marks for allowing an open-ended final project!
