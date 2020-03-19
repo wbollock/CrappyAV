@@ -19,9 +19,10 @@
 # how to get a goddamn test file
 
 # TODO CHECKLIST:
-# Hash function checking needs a lot of work
 # status page shit
-# quaratine
+# fix github screenshots/gifs, spelling mistakes and new updates
+
+
 
 
 # CONFIG VALUES
