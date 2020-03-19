@@ -167,9 +167,9 @@ hashCheck(){
     # ed0335c6becd00a2276481bb7561b743  testvirus.txt
     if [ -f "$hashDir"/"$fullHashFile" ]; then
         if grep -q "$fileHash" "$hashDir"/"$fullHashFile"; then
-            echo -e "${RED}Match found! This wasn't supposed to happen.${NC}"
+            echo -e "${RED}Match found! If you actually suspect this file is malicious, please .${NC}"
             echo ""
-            echo -e "Would you link to quarantine ${RED}$scaryVirus${NC}?"
+            echo -e "Would you like to quarantine ${RED}$scaryVirus${NC}?"
             echo -e "It will be moved to the folder ${BLUE}jail${NC} and stripped of all permissions. [y/N]"
             read -r quarChoice
             case $quarChoice in
@@ -192,7 +192,7 @@ hashCheck(){
 
     sleep 3
     
-        # this ate up all my ram
+    # this ate up all my ram
     # for hash in "${hashArray[@]}"
     # do
     # # compare fileHash to my big ass list
@@ -203,12 +203,28 @@ hashCheck(){
     # # TODO: It'd be cool if this made a rainbow
     # done
 
-    # echo -e "${RED}Our advanced blockchain neural-network AI didn't find anything wrong with the file. Proceed as normal!${NC}"
-
 }
 
 updateStatusPage(){
-    # 6. Optional: create a web status page of crappyav
+
+    echo "Would you like to enable the Apache web status page? [y/N]"
+    echo "The page will exist at ${BLUE}/var/www/html/crappyavweb/index.html${NC} (localhost/crappyavweb/index.html)"
+    read -r webChoice
+    # if yes, touch file that will act as a flag
+    case $webChoice in
+    # N is bigger letter in prompt and therefore default, thats why "" is added to switch statement
+		y|Y) touch webflag ;;
+		n|N|"")  ;;
+		*) echo -e "${RED}Error...${NC}" && sleep .5
+	esac
+
+    # if webflag exists, then other functions will contribute to it?
+    # Thoughts:
+    # make a base template for webpage that then gets moved when flag added/"y" enabled
+    # mv back the page to . when "n" is selected
+    # if webflag exists, then when specific function is run, it somehow adds to the webpage
+
+    
     # Include:
     # Last time run
     # Last file checked
@@ -257,7 +273,7 @@ show_menus() {
     echo ""
 	echo "1) Download virus definitions (Recommended)"
 	echo -e "2) Run hash list on a suspected ${RED}malware${NC}"
-	echo "3) Update the CrappyAV web status page"
+	echo "3) Enable/Disable the CrappyAV web status page"
     echo "4) Delete all hash files from system"
     echo "5) Exit"
 }

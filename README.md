@@ -2,6 +2,9 @@
 
 A terrible CLI AV. Grabs MD5 hashes of virus files and lets the user scan individual files to see if they match against known virus hashes.
 
+**Nota Bene**:
+*Please* do not use this in a production environment or if you're actually worried about malicious files. It is a student project.
+
 
 ## Option Menu
 ![](img/crappyavheader.png)
@@ -30,6 +33,18 @@ If you're using ZSH, you'll need to mapfile module.
 
 ```
 zmodload zsh/mapfile
+```
+
+
+
+### Testing
+
+To test this program, please utilize the convinent testvirus.txt. It's hash has been added to the hashlist, once downloaded. Select option **2** and type "testvirus.txt".
+
+Note to get this file back after quarantine, run:
+```
+sudo mv jail/testvirus.txt .
+sudo chmod 444 testvirus.txt
 ```
 
 ## Credits

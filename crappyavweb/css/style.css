@@ -1,0 +1,128 @@
+/* made by Will Bollock */
+/* website design is aimed to be streamlined and self built */
+html {
+    scroll-behavior: smooth;
+  }
+
+#about
+  {
+    margin: 0 auto;
+  }
+
+body {
+    margin: 2em auto !important;
+    max-width: 30em;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #444;
+    padding: 0 10px;
+
+}
+
+h1, h2, h3, h4, h5 {
+    line-height: 1.2;
+    color:black;
+}
+
+
+img {
+    width: 125%;
+    /*padding-left:5%;*/
+}
+
+
+/* Dark Mode styles */
+body.dark-mode {
+    background: black;
+}
+.dark-mode label {
+    color: white;
+}
+/* issues when having them all on one line
+works well seperated */
+.dark-mode h1 {
+    color:#E9967A;
+}
+.dark-mode h2 {
+  color: #E9967A;
+}
+.dark-mode h3 {
+  color: #E9967A;
+}
+.dark-mode h4 {
+  color: #E9967A;
+}
+.dark-mode h5 {
+  color: #E9967A;
+}
+.dark-mode p {
+    
+    color:white;
+}
+
+.dark-mode a {
+  color: #98FB98;
+}
+
+.dark-mode code {
+  color: white;
+}
+
+
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 30em;
+  }
+
+
+#navbar {
+    overflow: hidden;
+    background-color: #333;
+  }
+  
+  #navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  #navbar a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+  background-color: #333;
+  color: #eee;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.accordion:active, .accordion:hover {
+  background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+#fullbody {
+  width: 20%;
+  align-content: center;
+}
