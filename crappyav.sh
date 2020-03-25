@@ -191,6 +191,11 @@ hashCheck(){
         echo -e "${YELLOW} Oh no. Couldn't find any hashes. Did you download virus definitions?${NC}"
     fi
 
+      if [ -f webflag ]; then
+      # get file run against hashes
+      sed -ri "s@<p(|\s+[^>]*)>Last file checked against hashes:(.*?)<\/p\s*>@<p>Last file checked against hashes: $scaryVirus</p>@g" crappyavweb/index.html
+     fi
+
     sleep 3
     
     # this ate up all my ram
@@ -208,16 +213,24 @@ hashCheck(){
 
 updateStatusPage(){
 
-    echo "Would you like to enable the Apache web status page? [y/N]"
-    echo "The page will exist at ${BLUE}/var/www/html/crappyavweb/index.html${NC} (localhost/crappyavweb/index.html)"
+    echo "Would you like to enable the web status page? [y/N]"
+    echo -e "The page will exist at ${BLUE}crappyavweb/index.html${NC}"
     read -r webChoice
     # if yes, touch file that will act as a flag
     case $webChoice in
-    # N is bigger letter in prompt and therefore default, thats why "" is added to switch statement
+    # if webflag exists, other functions throw their data in index.html
 		y|Y) touch webflag ;;
-		n|N|"")  ;;
+		n|N|"") rm -rf webflag  ;;
 		*) echo -e "${RED}Error...${NC}" && sleep .5
 	esac
+# idea: have JS call bash script with different parameters
+# if bash $1 = "lastrun", then script gets firstrun from webstats
+# script echos only text from 
+
+# terrible idea, JS and bash dont mix
+# just have a second 
+
+
 
     # if webflag exists, then other functions will contribute to it?
     # Thoughts:
@@ -237,7 +250,7 @@ updateStatusPage(){
     # probably with a flag file?
 
     # probably best to call a second script with parameters
-    echo "updateStatusPage Placeholder"
+    
     sleep 2
 }
 
@@ -274,9 +287,31 @@ show_menus() {
     echo ""
 	echo "1) Download virus definitions (Recommended)"
 	echo -e "2) Run hash list on a suspected ${RED}malware${NC}"
-	echo "3) Enable/Disable the CrappyAV web status page"
+	echo -e "3) ${GREEN}Enable/Disable${NC} the CrappyAV web status page"
     echo "4) Delete all hash files from system"
     echo "5) Exit"
+
+    # if web enabled, throw current date into index.html
+     if [ -f webflag ]; then
+    # on program run, get as many stats as I can from main page
+     
+     # uses @ as delimiter
+     # <p(|\s+[^>]*)>Last time program ran:(.*?)<\/p\s*>
+     # will match:
+     # <p>Last time program ran:</p>
+	#  <p>Last time program ran: Wed 25 Mar 2020 04:54:07 PM EDT</p>
+
+        sed -ri "s@<p(|\s+[^>]*)>Last time program ran:(.*?)<\/p\s*>@<p>Last time program ran: $(date)</p>@g" crappyavweb/index.html
+        
+        sed -ri "s@<p(|\s+[^>]*)>Amount of hashes downloaded:(.*?)<\/p\s*>@<p>Amount of hashes downloaded: $(wc -l hashes/hashlist.txt | head -n1 | cut -d " " -f1)</p>@g" crappyavweb/index.html
+        
+
+        # get current files in jail    ls -1 jail | wc -l
+        sed -ri "s@<p(|\s+[^>]*)>Number of files in jail:(.*?)<\/p\s*>@<p>Number of files in jail: $(ls -1 jail | wc -l)</p>@g" crappyavweb/index.html
+        
+     fi
+
+
 }
 
 # Read options. Call another function from choices
@@ -293,6 +328,10 @@ read_options(){
            exit 0 ;;
 		*) echo -e "${RED}Error...${NC}" && sleep .5
 	esac
+
+
+   
+
 }
 
 # -----------------------------------

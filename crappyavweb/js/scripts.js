@@ -12,15 +12,15 @@ $('#mode').change(function(){
     }
     
 });
-// display last modified date
-var lm = document.lastModified;
-document.getElementById("lastModified").innerHTML = lm;
+// // display last modified date
+// var lm = document.lastModified;
+// document.getElementById("lastModified").innerHTML = lm;
 
-//sticky nav bar
-window.onscroll = function() {myFunction()};
+// //sticky nav bar
+// window.onscroll = function() {myFunction()};
 
-var navbar = document.getElementById("navbar");
-var sticky = navbar.offsetTop;
+// var navbar = document.getElementById("navbar");
+// var sticky = navbar.offsetTop;
 
 function myFunction() {
   if (window.pageYOffset >= sticky) {
