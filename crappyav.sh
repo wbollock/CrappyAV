@@ -209,15 +209,23 @@ hashCheck(){
 updateStatusPage(){
 
     echo "Would you like to enable the Apache web status page? [y/N]"
-    echo "The page will exist at ${BLUE}/var/www/html/crappyavweb/index.html${NC} (localhost/crappyavweb/index.html)"
+    echo "The page will exist at ${BLUE}crappyavweb/index.html${NC}"
     read -r webChoice
     # if yes, touch file that will act as a flag
     case $webChoice in
-    # N is bigger letter in prompt and therefore default, thats why "" is added to switch statement
+    # if webflag exists, other functions throw their data in index.html
 		y|Y) touch webflag ;;
-		n|N|"")  ;;
+		n|N|"") rm -rf webflag  ;;
 		*) echo -e "${RED}Error...${NC}" && sleep .5
 	esac
+# idea: have JS call bash script with different parameters
+# if bash $1 = "lastrun", then script gets firstrun from webstats
+# script echos only text from 
+
+# terrible idea, JS and bash dont mix
+# just have a second 
+
+
 
     # if webflag exists, then other functions will contribute to it?
     # Thoughts:
@@ -237,7 +245,7 @@ updateStatusPage(){
     # probably with a flag file?
 
     # probably best to call a second script with parameters
-    echo "updateStatusPage Placeholder"
+    
     sleep 2
 }
 
@@ -274,9 +282,12 @@ show_menus() {
     echo ""
 	echo "1) Download virus definitions (Recommended)"
 	echo -e "2) Run hash list on a suspected ${RED}malware${NC}"
-	echo "3) Enable/Disable the CrappyAV web status page"
+	echo -e "3) ${GREEN}Enable/Disable${NC} the CrappyAV web status page"
     echo "4) Delete all hash files from system"
     echo "5) Exit"
+
+    # if web enabled, throw current date into index.html
+     if [ -f webflag ]; then
 }
 
 # Read options. Call another function from choices
@@ -293,6 +304,10 @@ read_options(){
            exit 0 ;;
 		*) echo -e "${RED}Error...${NC}" && sleep .5
 	esac
+
+
+   
+
 }
 
 # -----------------------------------
