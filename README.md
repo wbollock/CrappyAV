@@ -17,7 +17,7 @@ Take your suspected malware and shove it in a place where the son doesn't shine.
 
 ![](img/hashcheck.gif)
 
-## Web Status (crappavweb branch only)
+## Web Status (Optional)
 
 Show off to the world just how secure you are!
 
