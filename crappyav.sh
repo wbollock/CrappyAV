@@ -213,8 +213,8 @@ hashCheck(){
 
 updateStatusPage(){
 
-    echo "Would you like to enable the Apache web status page? [y/N]"
-    echo "The page will exist at ${BLUE}crappyavweb/index.html${NC}"
+    echo "Would you like to enable the web status page? [y/N]"
+    echo -e "The page will exist at ${BLUE}crappyavweb/index.html${NC}"
     read -r webChoice
     # if yes, touch file that will act as a flag
     case $webChoice in
@@ -298,13 +298,13 @@ show_menus() {
      # uses @ as delimiter
      # find any occurence of last time run and replace it
      # this sucked to debug
-        sed -ri "s@<p>Last program ran:|.*|<\/p>@<p>Last program ran: $(date)</p>@g" crappyavweb/index.html
+        sed -i "s@<p>Last program ran:|.*|<\/p>@<p>Last program ran: $(date)</p>@g" crappyavweb/index.html
 
-        sed -ri "s@<p>Amount of hashes downloaded:|.*|<\/p>@<p>Amount of hashes downloaded: $(wc -l hashes/hashlist.txt | head -n1 | cut -d " " -f1)</p>@g" crappyavweb/index.html  
+        sed -i "s@<p>Amount of hashes downloaded:|.*|<\/p>@<p>Amount of hashes downloaded: $(wc -l hashes/hashlist.txt | head -n1 | cut -d " " -f1)</p>@g" crappyavweb/index.html  
 
         # get current files in jail    ls -1 jail | wc -l
         
-        sed -ri "s@<p>Number of files in jail:|.*|<\/p>@<p>Number of files in jail: $(ls -1 jail | wc -l)</p>@g" crappyavweb/index.html
+        #sed -ri "s@<p>Number of files in jail:|.*|<\/p>@<p>Number of files in jail: $(ls -1 jail | wc -l)</p>@g" crappyavweb/index.html
      fi
 
 

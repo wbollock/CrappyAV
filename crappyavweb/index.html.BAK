@@ -1,0 +1,34 @@
+<!-- Made by Will Bollock -->
+<!-- Note: borrowed from earlier project I did -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>CrappyAV</title>
+        <link type="text/css" rel="stylesheet" href="css/style.css"/>
+        <script type="text/javascript" rel="script" src="js/scripts.js" defer></script>
+        <script src="js/jquery-3.4.0.min.js"></script>
+        <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+        
+</head>
+    
+    <body>
+            <!--Start of code submit form-->
+            <label for="mode" style="float:right"><input id="mode" type="checkbox"> Dark Mode</label>
+            <h1>CrappyAV Web Status Page</h1>
+            <br>
+            <br>
+            <!--<p>Current Status:| .* |<\/p> (matching regex)
+                will match <p>Current Status: Wed 25 Mar 2020 04:39:25 PM EDT </p>
+                AND <p>Current Status:</p>  -->
+
+                <!-- these strings are hardcoded sadly, cause of my seds-->
+            <p>Last time program ran:</p>
+            <br>
+            <p>Amount of hashes downloaded:</p>
+            <br>
+            <p>Last file checked against hashes:</p>
+            <br>
+            <p>Number of files in jail:</p>
+    </body>
