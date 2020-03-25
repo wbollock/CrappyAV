@@ -288,6 +288,13 @@ show_menus() {
 
     # if web enabled, throw current date into index.html
      if [ -f webflag ]; then
+     # uses @ as delimiter
+     # find any occurence of last time run and replace it
+     # this sucked to debug
+        sed -r "s@<p>Last time run:|.*|<\/p>@<p>Last time run: $(date)</p>@g"
+     fi
+
+
 }
 
 # Read options. Call another function from choices
