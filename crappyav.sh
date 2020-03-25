@@ -191,6 +191,11 @@ hashCheck(){
         echo -e "${YELLOW} Oh no. Couldn't find any hashes. Did you download virus definitions?${NC}"
     fi
 
+      if [ -f webflag ]; then
+      # get file run against hashes
+        sed -ri "s@<p><p>Last file checked against hashes:|.*|<\/p>@<p>Last file checked against hashes: $scaryVirus</p>@g" crappyavweb/index.html 
+     fi
+
     sleep 3
     
     # this ate up all my ram
@@ -288,10 +293,18 @@ show_menus() {
 
     # if web enabled, throw current date into index.html
      if [ -f webflag ]; then
+    # on program run, get as many stats as I can from main page
+     
      # uses @ as delimiter
      # find any occurence of last time run and replace it
      # this sucked to debug
-        sed -r "s@<p>Last time run:|.*|<\/p>@<p>Last time run: $(date)</p>@g"
+        sed -ri "s@<p>Last program ran:|.*|<\/p>@<p>Last program ran: $(date)</p>@g" crappyavweb/index.html
+
+        sed -ri "s@<p>Amount of hashes downloaded:|.*|<\/p>@<p>Amount of hashes downloaded: $(wc -l hashes/hashlist.txt | head -n1 | cut -d " " -f1)</p>@g" crappyavweb/index.html  
+
+        # get current files in jail    ls -1 jail | wc -l
+        
+        sed -ri "s@<p>Number of files in jail:|.*|<\/p>@<p>Number of files in jail: $(ls -1 jail | wc -l)</p>@g" crappyavweb/index.html
      fi
 
 
