@@ -193,7 +193,7 @@ hashCheck(){
 
       if [ -f webflag ]; then
       # get file run against hashes
-        sed -ri "s@<p><p>Last file checked against hashes:|.*|<\/p>@<p>Last file checked against hashes: $scaryVirus</p>@g" crappyavweb/index.html 
+      sed -ri "s@<p(|\s+[^>]*)>Last file checked against hashes:(.*?)<\/p\s*>@<p>Last file checked against hashes: $scaryVirus</p>@g" crappyavweb/index.html
      fi
 
     sleep 3
@@ -296,15 +296,19 @@ show_menus() {
     # on program run, get as many stats as I can from main page
      
      # uses @ as delimiter
-     # find any occurence of last time run and replace it
-     # this sucked to debug
-        sed -i "s@<p>Last program ran:|.*|<\/p>@<p>Last program ran: $(date)</p>@g" crappyavweb/index.html
+     # <p(|\s+[^>]*)>Last time program ran:(.*?)<\/p\s*>
+     # will match:
+     # <p>Last time program ran:</p>
+	#  <p>Last time program ran: Wed 25 Mar 2020 04:54:07 PM EDT</p>
 
-        sed -i "s@<p>Amount of hashes downloaded:|.*|<\/p>@<p>Amount of hashes downloaded: $(wc -l hashes/hashlist.txt | head -n1 | cut -d " " -f1)</p>@g" crappyavweb/index.html  
+        sed -ri "s@<p(|\s+[^>]*)>Last time program ran:(.*?)<\/p\s*>@<p>Last time program ran: $(date)</p>@g" crappyavweb/index.html
+        
+        sed -ri "s@<p(|\s+[^>]*)>Amount of hashes downloaded:(.*?)<\/p\s*>@<p>Amount of hashes downloaded: $(wc -l hashes/hashlist.txt | head -n1 | cut -d " " -f1)</p>@g" crappyavweb/index.html
+        
 
         # get current files in jail    ls -1 jail | wc -l
+        sed -ri "s@<p(|\s+[^>]*)>Number of files in jail:(.*?)<\/p\s*>@<p>Number of files in jail: $(ls -1 jail | wc -l)</p>@g" crappyavweb/index.html
         
-        #sed -ri "s@<p>Number of files in jail:|.*|<\/p>@<p>Number of files in jail: $(ls -1 jail | wc -l)</p>@g" crappyavweb/index.html
      fi
 
 
