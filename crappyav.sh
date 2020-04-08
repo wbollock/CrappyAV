@@ -10,37 +10,26 @@
 #%    they match against known virus hashes.
 #%
 #% USAGE
-#%    ${SCRIPT_NAME} -o DEFAULT arg1 arg2
+#%    ./crappav.sh (no parameter options)
 #%
 #================================================================
 
-# Potential Problems: 
-# array with 131072 values. Maybe kenny can help on that
-# how to get a goddamn test file
-
-# TODO CHECKLIST:
-# status page shit
-# fix github screenshots/gifs, spelling mistakes and new updates
-
-
-
-
-# CONFIG VALUES
+# Spitballing Future Features:
+# Real time scanning, or scan recent files in /home/ directories (cron job maybe?)
+# Maybe expand it to be a small security platform.. check for Root access on SSH... other smart security things..
+# convert to a database? useful? sqlite?
+# modern HIDS seem to scan 'relevant objects' in system, produce database of them.. important system files?
+# cav acronym is taken by comodo av.. damn
 
 hashDir=hashes
-
-# for single hash file
 hashfile=md5_hash
-hashfileFixed=md5_hash_fixed
 fullHashFile=hashlist.txt
-fileJail=jail
 
 # to have a file we can verify the checking mechanism against
 virusTest=testvirus.txt
-cleanTest=testclean.txt
-# note that both files will really look like md5_hash_204_fixed after dl
 
-# used for chaning text color
+
+# used for changing text color
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -49,21 +38,9 @@ BLUE='\033[0;34m'
 BOLD="\033[1m"
 YELLOW='\033[0;33m'
 
-# cat << "CrappyAV"
-#  _______  _______  _______  _______  _______           _______          
-# (  ____ \(  ____ )(  ___  )(  ____ )(  ____ )|\     /|(  ___  )|\     /|
-# | (    \/| (    )|| (   ) || (    )|| (    )|( \   / )| (   ) || )   ( |
-# | |      | (____)|| (___) || (____)|| (____)| \ (_) / | (___) || |   | |
-# | |      |     __)|  ___  ||  _____)|  _____)  \   /  |  ___  |( (   ) )
-# | |      | (\ (   | (   ) || (      | (         ) (   | (   ) | \ \_/ / 
-# | (____/\| ) \ \__| )   ( || )      | )         | |   | )   ( |  \   /  
-# (_______/|/   \__/|/     \||/       |/          \_/   |/     \|   \_/   
-# CrappyAV
 
+# Download many MD5 hashes ~1.1GB
 
-
-# Download a metric shit ton of MD5 hashes
-# or, well, one
 downloadHashes(){
 
     echo -e "${RED}Please note downloading all of these hashes requires 1.1GB of disk space and bandwith.${NC}"
@@ -73,7 +50,7 @@ downloadHashes(){
     echo -e "${RED}Do you want to download all hashes? [y/N]${NC}"
     read -r hashChoice
     case $hashChoice in
-    # N is bigger letter in prompt and therefore default, thats why "" is added to switch statement
+    # N default letter
 		y|Y) allHashes ;;
 		n|N|"")  ;;
 		*) echo -e "${RED}Error...${NC}" && sleep .5
@@ -108,7 +85,7 @@ allHashes(){
     sleep 2
     echo -e "${RED}Trimming and combining files...${NC}"
     sleep 2
-    # need to remove headers now
+    # need to remove headers now (#)
     for file in "${hashDir:?}/"*
     do
         sed '/^#/ d' < "$file" > "$file"_fixed
@@ -122,29 +99,6 @@ allHashes(){
 
 }
 
-# would be more work than it's worth allowing one file
-# oneHashDL(){
-    
-#     echo "One hash file will be downloaded."
-#     sleep 1
-
-#     if [ ! -f "$hashDir"/"$hashfile" ]; then
-#     # hash file doesn't already exist, then download this
-#         wget -O "$hashDir"/"$hashfile" https://virusshare.com/hashes/VirusShare_00000.md5
-#     fi
-
-#     # Strip hashfile of the top header
-#     # thankfully all header lines started with #
-#     if [ ! -f "$hashDir"/"$hashfileFixed" ]; then
-    
-#         sed '/^#/ d' < "$hashDir"/"$hashfile" > "$hashDir"/"$hashfileFixed"
-#         rm -f "$hashDir"/"$hashfile"
-#         # clear up old hash file to save space
-#     fi
-    
-#     rm -f "$hashDir"/"$hashfile"
-
-# }
 
 hashCheck(){
     echo -e "${BLUE}Hi user. Tell me what file you think is malware:${NC}"
@@ -185,7 +139,7 @@ hashCheck(){
             esac
 
         else
-            echo -e "${BLUE}Yay! Your file is safe. Chmod 777 whatever you want.${NC}"
+            echo -e "${BLUE}Your file is safe. Chmod 777 to your heart's desire.${NC}"
         fi
     else
         echo -e "${YELLOW} Oh no. Couldn't find any hashes. Did you download virus definitions?${NC}"
@@ -197,17 +151,6 @@ hashCheck(){
      fi
 
     sleep 3
-    
-    # this ate up all my ram
-    # for hash in "${hashArray[@]}"
-    # do
-    # # compare fileHash to my big ass list
-    # if [ "$hash" == "$fileHash" ]; then
-    #     echo -e "${RED}Match found! This wasn't supposed to happen. Wipe your drive."
-    # fi
-    # echo "$hash"
-    # # TODO: It'd be cool if this made a rainbow
-    # done
 
 }
 
@@ -222,35 +165,7 @@ updateStatusPage(){
 		y|Y) touch webflag ;;
 		n|N|"") rm -rf webflag  ;;
 		*) echo -e "${RED}Error...${NC}" && sleep .5
-	esac
-# idea: have JS call bash script with different parameters
-# if bash $1 = "lastrun", then script gets firstrun from webstats
-# script echos only text from 
-
-# terrible idea, JS and bash dont mix
-# just have a second 
-
-
-
-    # if webflag exists, then other functions will contribute to it?
-    # Thoughts:
-    # make a base template for webpage that then gets moved when flag added/"y" enabled
-    # mv back the page to . when "n" is selected
-    # if webflag exists, then when specific function is run, it somehow adds to the webpage
-
-    
-    # Include:
-    # Last time run
-    # Last file checked
-    # Amount of hashes downloaded
-    # Hash of last file checked
-    # Number of exploits found all time
-
-    # leave user choice to disable or enable server status page
-    # probably with a flag file?
-
-    # probably best to call a second script with parameters
-    
+	esac    
     sleep 2
 }
 
