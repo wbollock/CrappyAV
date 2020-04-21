@@ -3,7 +3,7 @@
 A terrible CLI AV. Grabs MD5 hashes of virus files and lets the user scan individual files to see if they match against known virus hashes.
 
 **Nota Bene**:
-*Please* do not use this in a production environment or if you're actually worried about malicious files. It is a student project.
+*Please* do not use this in a production environment or if you are actually worried about malicious files. It is a student project.
 
 
 ## Option Menu
@@ -13,13 +13,13 @@ A terrible CLI AV. Grabs MD5 hashes of virus files and lets the user scan indivi
 
 ## Quarantine Malware
 
-Take your suspected malware and shove it in a place where the son doesn't shine. CrappyAV will strip all permissions and put the file in virtual timeout.
+Take your suspected malware and shove it in a place where the sun doesn't shine. CrappyAV will strip all permissions and put the file in virtual timeout.
 
 ![](img/hashcheck.gif)
 
 ## Web Status (Optional)
 
-Show off to the world just how secure you are!
+Show off to the world just how secure you are! 
 
 ![](img/web1.gif)
 
@@ -45,7 +45,7 @@ zmodload zsh/mapfile
 
 ### Testing
 
-To test this program, please utilize the convinent testvirus.txt. It's hash has been added to the hashlist, once downloaded. Select option **2** and type "testvirus.txt".
+To test this program, please utilize the convenient testvirus.txt. It's hash has been added to the hashlist, once downloaded. Select option **2** and type "testvirus.txt".
 
 Note to get this file back after quarantine, run:
 ```
