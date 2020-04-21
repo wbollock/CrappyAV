@@ -38,6 +38,14 @@ BLUE='\033[0;34m'
 BOLD="\033[1m"
 YELLOW='\033[0;33m'
 
+if [ ! -d "$hashDir" ]; then
+     mkdir "$hashDir"
+     touch "$hashDir"/"$fullHashFile"
+fi
+
+if [ ! -d jail ]; then
+     mkdir jail
+fi
 
 # Download many MD5 hashes ~1.1GB
 
@@ -59,6 +67,7 @@ downloadHashes(){
 }
 
 allHashes(){
+
     echo "Downloading 374 hash files"
     sleep 1
     # can iterate easily through the links. https://virusshare.com/hashes/VirusShare_00001.md5
