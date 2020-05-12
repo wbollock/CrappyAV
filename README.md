@@ -41,6 +41,7 @@ If you're using ZSH, you'll need to mapfile module.
 zmodload zsh/mapfile
 ```
 
+You'll also need `wget`.
 
 
 ### Testing
