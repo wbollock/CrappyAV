@@ -23,6 +23,7 @@
 # cav acronym is taken by comodo av.. damn
 # expand wget functions to account for more pages in virus total (owned by Alphabet?)
 # uninstall feature, purge crappyav
+# EICAR test string approved :)
 
 hashDir=hashes
 hashfile=md5_hash
