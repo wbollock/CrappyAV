@@ -19,7 +19,10 @@
 # Maybe expand it to be a small security platform.. check for Root access on SSH... other smart security things..
 # convert to a database? useful? sqlite?
 # modern HIDS seem to scan 'relevant objects' in system, produce database of them.. important system files?
+# can choose what files you want to make sure dont change? more of an auditor then?
 # cav acronym is taken by comodo av.. damn
+# expand wget functions to account for more pages in virus total (owned by Alphabet?)
+# uninstall feature, purge crappyav
 
 hashDir=hashes
 hashfile=md5_hash
