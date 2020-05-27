@@ -17,13 +17,32 @@
 # Spitballing Future Features:
 # Real time scanning, or scan recent files in /home/ directories (cron job maybe?)
 # Maybe expand it to be a small security platform.. check for Root access on SSH... other smart security things..
+# files to protect/monitor? (/etc/shadow, /etc/passwd, /etc/sshd_config, ufw rules?)
+# will need a daemon (systemd)
+# also remove daemon
 # convert to a database? useful? sqlite?
 # modern HIDS seem to scan 'relevant objects' in system, produce database of them.. important system files?
 # can choose what files you want to make sure dont change? more of an auditor then?
 # cav acronym is taken by comodo av.. damn
-# expand wget functions to account for more pages in virus total (owned by Alphabet?)
-# uninstall feature, purge crappyav
+
+
 # EICAR test string approved :)
+
+# Summer Semester Goals
+# 1. HIDS in some sort
+# a) Index files the user wants to protect (give recommended options)
+# b) Create a hash of those values with kv-bash
+# b1) https://stackoverflow.com/questions/14370133/is-there-a-way-to-create-key-value-pairs-in-bash-script
+# c) Create a daemon that monitors those every X minutes/hours
+# d) Use mail or create a file that reports if any of those hash files changed (or MOTD??)
+
+
+
+# 2. Better practices
+
+
+# Summer Semester Completed
+# 1. Better dynamic handling of amount of pages on virustotal
 
 hashDir=hashes
 hashfile=md5_hash
@@ -31,6 +50,9 @@ fullHashFile=hashlist.txt
 
 # to have a file we can verify the checking mechanism against
 virusTest=testvirus.txt
+
+# hash source
+hashSource="https://virusshare.com/hashes.4n6"
 
 
 # used for changing text color
@@ -72,14 +94,23 @@ downloadHashes(){
 
 allHashes(){
 
-    echo "Downloading 374 hash files"
+    
+    # root page of web directory
+    hashRootPage="hashPage.txt"
+    curl -s $hashSource -o $hashRootPage
+
+    # use a slimely regex to get the max page number
+    maxPage=$(grep -Eo '(00)[0-9]+' $hashRootPage | sort -rn | head -n 1 | cut -c 3-)
+
+    echo "Downloading $maxPage hash files"
     sleep 1
     # can iterate easily through the links. https://virusshare.com/hashes/VirusShare_00001.md5
     # https://virusshare.com/hashes/VirusShare_00002.md5, etc
     # ends at 374
+    # ends at highest number on page
 
     #download all 374 hash files
-    for i in {1..374}
+    for ((i=1;i<="$maxPage";i++))
     do
     # have to adjust url based on file number
         if ((i < 10 ))
@@ -95,6 +126,9 @@ allHashes(){
 
     done
  
+    # clean up my earlier curl sins
+    rm $hashRootPage
+
     sleep 2
     echo -e "${RED}Trimming and combining files...${NC}"
     sleep 2
@@ -117,6 +151,8 @@ hashCheck(){
     echo -e "${BLUE}Hi user. Tell me what file you think is malware:${NC}"
     # example: /home/wbollock/class/CrappyAV/testvirus.txt
     read -r scaryVirus
+
+    curl 
 
     # 4. Calculate MD5 hash of user file (hash should match downloaded ones)
     # md5sum program used for this. should be installed on most *nix
