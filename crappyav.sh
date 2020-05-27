@@ -17,18 +17,32 @@
 # Spitballing Future Features:
 # Real time scanning, or scan recent files in /home/ directories (cron job maybe?)
 # Maybe expand it to be a small security platform.. check for Root access on SSH... other smart security things..
+# files to protect/monitor? (/etc/shadow, /etc/passwd, /etc/sshd_config, ufw rules?)
+# will need a daemon (systemd)
+# also remove daemon
 # convert to a database? useful? sqlite?
 # modern HIDS seem to scan 'relevant objects' in system, produce database of them.. important system files?
 # can choose what files you want to make sure dont change? more of an auditor then?
 # cav acronym is taken by comodo av.. damn
-# expand wget functions to account for more pages in virus total (owned by Alphabet?)
-# uninstall feature, purge crappyav
+
+
 # EICAR test string approved :)
 
 # Summer Semester Goals
 # 1. HIDS in some sort
+# a) Index files the user wants to protect (give recommended options)
+# b) Create a hash of those values with kv-bash
+# b1) https://stackoverflow.com/questions/14370133/is-there-a-way-to-create-key-value-pairs-in-bash-script
+# c) Create a daemon that monitors those every X minutes/hours
+# d) Use mail or create a file that reports if any of those hash files changed (or MOTD??)
+
+
+
 # 2. Better practices
-# 3. Database? More hashes.
+
+
+# Summer Semester Completed
+# 1. Better dynamic handling of amount of pages on virustotal
 
 hashDir=hashes
 hashfile=md5_hash
