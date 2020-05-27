@@ -39,6 +39,7 @@
 
 
 # 2. Better practices
+# a) Decide on curl OR wget
 
 
 # Summer Semester Completed
