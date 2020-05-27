@@ -25,12 +25,20 @@
 # uninstall feature, purge crappyav
 # EICAR test string approved :)
 
+# Summer Semester Goals
+# 1. HIDS in some sort
+# 2. Better practices
+# 3. Database? More hashes.
+
 hashDir=hashes
 hashfile=md5_hash
 fullHashFile=hashlist.txt
 
 # to have a file we can verify the checking mechanism against
 virusTest=testvirus.txt
+
+# hash source
+hashSource="https://virusshare.com/hashes.4n6"
 
 
 # used for changing text color
@@ -72,14 +80,23 @@ downloadHashes(){
 
 allHashes(){
 
-    echo "Downloading 374 hash files"
+    
+    # root page of web directory
+    hashRootPage="hashPage.txt"
+    curl -s $hashSource -o $hashRootPage
+
+    # use a slimely regex to get the max page number
+    maxPage=$(grep -Eo '(00)[0-9]+' $hashRootPage | sort -rn | head -n 1 | cut -c 3-)
+
+    echo "Downloading $maxPage hash files"
     sleep 1
     # can iterate easily through the links. https://virusshare.com/hashes/VirusShare_00001.md5
     # https://virusshare.com/hashes/VirusShare_00002.md5, etc
     # ends at 374
+    # ends at highest number on page
 
     #download all 374 hash files
-    for i in {1..374}
+    for ((i=1;i<="$maxPage";i++))
     do
     # have to adjust url based on file number
         if ((i < 10 ))
@@ -95,6 +112,9 @@ allHashes(){
 
     done
  
+    # clean up my earlier curl sins
+    rm $hashRootPage
+
     sleep 2
     echo -e "${RED}Trimming and combining files...${NC}"
     sleep 2
@@ -117,6 +137,8 @@ hashCheck(){
     echo -e "${BLUE}Hi user. Tell me what file you think is malware:${NC}"
     # example: /home/wbollock/class/CrappyAV/testvirus.txt
     read -r scaryVirus
+
+    curl 
 
     # 4. Calculate MD5 hash of user file (hash should match downloaded ones)
     # md5sum program used for this. should be installed on most *nix
